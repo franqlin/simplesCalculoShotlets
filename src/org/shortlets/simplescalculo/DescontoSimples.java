@@ -1,261 +1,235 @@
 package org.shortlets.simplescalculo;
 
-import java.util.ArrayList;
-import java.util.Locale;
+
+
+import org.shortlets.simplescalculo.calculadora.TipoCalculo;
+import org.shortlets.simplescalculo.util.ViewFormatacaoUtil;
+
+import com.actionbarsherlock.ActionBarSherlock;
+import com.actionbarsherlock.ActionBarSherlock.OnCreateOptionsMenuListener;
+import com.actionbarsherlock.view.MenuItem;
+
 
 
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnCreateContextMenuListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.NumberPicker.OnValueChangeListener;
 
-public class DescontoSimples extends Activity implements OnInitListener{
-	private static final String DESC_TOTAL = "DESC_TOTAL";
-	private static final String PERCENTUAL = "PERCENTUAL";
+public class DescontoSimples extends Activity implements OnCreateOptionsMenuListener{
 
-	private double valorDeEntrada;
+
+	ActionBarSherlock mSherlock = ActionBarSherlock.wrap(this);
 	private double percentualCorrente;
-
-	private EditText valorDeEntradaTexto;
-	private TextView percentualTexto;
-	private EditText descontoTexto;
-	private EditText totalDescontoFinal;
-	private NumberPicker npInteiro;
-	private NumberPicker npDecimal;
-	private int pInteira=10;
-	private int pDecimal;
-	// Falar
-    private ImageButton btnSpeak;
-    protected static final int RESULT_SPEECH = 1;
-    private int MY_DATA_CHECK_CODE = 0;
-    protected TextToSpeech tts;
+	private TipoCalculo  tipoCalculo= TipoCalculo.DESCONTO;
+    private EditText valorPresente;
+    private EditText taxa;
+    private EditText resp;
+    private TextView labelResp;
+    private double dValorPresente;
+    private double dTaxa;
+    private double valorfinal=0.0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_desconto_simples);
+	
+        mSherlock.setUiOptions(ActivityInfo.UIOPTION_SPLIT_ACTION_BAR_WHEN_NARROW);
+        mSherlock.setContentView(R.layout.activity_desconto_simples);
+		valorPresente = (EditText) findViewById(R.id.idValorPresente);
+		valorPresente.addTextChangedListener(formatarEcalcular(Tipo.VALORPRESENTE));
+	
+		taxa = (EditText) findViewById(R.id.idPorcentagem);
+		taxa.addTextChangedListener(formatarEcalcular(Tipo.TAXA));  
+        
+		resp = (EditText) findViewById(R.id.idTotalDescontoFinal);
+		labelResp = (TextView) findViewById(R.id.labelResp1);
+		
+	}
 
-		if (savedInstanceState == null) {
-			valorDeEntrada = 0.0;
-			percentualCorrente = 0.0;
+	private TextWatcher formatarEcalcular(final Tipo tipoCalculo) {
+		
+		TextWatcher tw = new TextWatcher() {
 			
-		} else {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				switch (tipoCalculo) {
+				case VALORPRESENTE:
+					dValorPresente = ViewFormatacaoUtil.EditTextToDouble(s);
+					break;
 
-			valorDeEntrada = savedInstanceState.getDouble(DESC_TOTAL);
-			percentualCorrente = savedInstanceState.getInt(PERCENTUAL);
-		}
+				case TAXA:
+					dTaxa = ViewFormatacaoUtil.EditTextToDouble(s);
+					break;
+				}
+				calcular();
+			}
 
-		
-		descontoTexto = (EditText) findViewById(R.id.idDescontoTexto);
-		totalDescontoFinal = (EditText) findViewById(R.id.idTotalDescontoFinal);
-		
-		
-		
-		valorDeEntradaTexto = (EditText) findViewById(R.id.idValorTexto);
 
-		valorDeEntradaTexto.addTextChangedListener(formatarTextoParaNumerico);
-		//SeekBar percentualSeekBar = (SeekBar) findViewById(R.id.idPercentualSeekBar);
-        percentualTexto = (TextView) findViewById(R.id.idPercentual);
-		//percentualSeekBar.setOnSeekBarChangeListener(setSeekBarListener);
-
-		
-		npInteiro = (NumberPicker) findViewById(R.id.npInteiro);
-		npInteiro.setMaxValue(100);
-		npInteiro.setMinValue(0);
-		npInteiro.setWrapSelectorWheel(true);
-		npInteiro.setValue(10);
-		npInteiro.setOnValueChangedListener(parteInteiraChangedListener);
-		
-		npDecimal = (NumberPicker) findViewById(R.id.npDecimal);
-		npDecimal.setMaxValue(99);
-		npDecimal.setMinValue(0);
-		npDecimal.setValue(0);
-		npDecimal.setWrapSelectorWheel(true);
-		npDecimal.setOnValueChangedListener(parteDecimalChangedListener);
-		
-		
-		//Reconhecimento de Fala
-       // txtText = (TextView) findViewById(R.id.txtText);
-        
-        btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
-        btnSpeak.setOnClickListener(onClickSpeekButtonListener);
-        
-        // Leitura do resultado ::
-        Intent checkIntent = new Intent();
-        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
-
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,int after) {}
+			
+			@Override
+			public void afterTextChanged(Editable s) {}
+		};
+			return tw;
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.desconto_simples, menu);
-		return true;
+		 return mSherlock.dispatchCreateOptionsMenu(menu);
 	}
 	
-	private OnClickListener onClickSpeekButtonListener =new OnClickListener() {
-		 
-        @Override
-        public void onClick(View v) {
-
-            Intent intent = new Intent(
-                    RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "pt-BR");
-
-            try {
-                startActivityForResult(intent, RESULT_SPEECH);
-                valorDeEntradaTexto.setText("");
-            } catch (ActivityNotFoundException a) {
-                Toast t = Toast.makeText(getApplicationContext(),
-                        "Seu dispositivo n‹o suporta texto!",
-                        Toast.LENGTH_SHORT);
-                t.show();
-            }
-        }
-    };
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
- 
-        switch (requestCode) {
-        case RESULT_SPEECH: {
-            if (resultCode == RESULT_OK && null != data) {
- 
-                ArrayList<String> text = data
-                        .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
- 
-                valorDeEntradaTexto.setText(text.get(0));
-            }
-            break;
-        }
- 
-        }
-        
-        
-        if (requestCode == MY_DATA_CHECK_CODE) {
-            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-                // success, create the TTS instance
-                tts = new TextToSpeech(this, this);
-            } 
-            else {
-                // missing data, install it
-                Intent installIntent = new Intent();
-                installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-                startActivity(installIntent);
-            }
-         }
-    }
 	
-	private OnValueChangeListener parteInteiraChangedListener = new OnValueChangeListener() {
 
-		@Override
-		public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-			pInteira = picker.getValue();
-			calcularDesconto();
+	private void calcular() {
+       
+       
+       switch (tipoCalculo) {
+	case DESCONTO:
+		labelResp.setText(R.string.labelRespDesconto);
+		valorfinal = dValorPresente - (dValorPresente * dTaxa * .01);
+		break;
 
-		}
-
-	};
-	
-	private OnValueChangeListener parteDecimalChangedListener = new OnValueChangeListener() {
-
-		@Override
-		public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-			pDecimal = picker.getValue();
-			calcularDesconto();
-
-		}
-
-	};
-
-	private void calcularDesconto() {
-		// atualizar valor de porcentagem na tela
-		
-		percentualCorrente = Double.valueOf(pInteira +"."+pDecimal).doubleValue();
-		percentualTexto.setText("Taxa ("+percentualCorrente + "%)");
-		// calcular desconto
-		double customTipAmount = valorDeEntrada * percentualCorrente * .01;
-		// calcular total de desconto
-		double customTotalAmount = valorDeEntrada - customTipAmount;
-
-		// mostrar valores
-		descontoTexto.setText(String.format("%.02f", customTipAmount));
-		totalDescontoFinal.setText(String.format("%.02f", customTotalAmount));
-		
-		String valorDesconto = descontoTexto.getText().toString();
-		String valorDescontoTotal = totalDescontoFinal.getText().toString();
-		String text ="O seu desconto foi de "+valorDesconto +". Total a pagar "+valorDescontoTotal;
-		valorDeEntradaTexto.getText().toString();
-	
-		if (valorDeEntradaTexto.getText().toString().length() > 0) {
-			
-			Toast.makeText(DescontoSimples.this, "Saying: " + text,Toast.LENGTH_LONG).show();
-			tts.speak(text, TextToSpeech.QUEUE_ADD, null);
-		}
+	case ACRESCIMO:
+		labelResp.setText(R.string.labelRespAcrescimo);
+		valorfinal = dValorPresente + (dValorPresente * dTaxa * .01);
+		break;
+	}
+       resp.setText(String.format("%.02f", valorfinal));  
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 
-		outState.putDouble(DESC_TOTAL, valorDeEntrada);
-		outState.putDouble(PERCENTUAL, percentualCorrente);
+		//outState.putDouble(DESC_TOTAL, valorDeEntrada);
+		//outState.putDouble(PERCENTUAL, percentualCorrente);
 	}
 
- 
+	public void escolherTipoCalculo(View view) {
+		   
+	    boolean checked = ((RadioButton) view).isChecked();
+	    
+	    
+	    switch(view.getId()) {
+	        case R.id.idRadioDesconto:
+	            if (checked)
+	            	tipoCalculo= TipoCalculo.DESCONTO; 
+	                calcular();
+	            break;
+	        case R.id.idRadioAcrescimo:
+	            if (checked)
+	            	tipoCalculo= TipoCalculo.ACRESCIMO; 
+	            	calcular();
+	            break;
+	    }
+	}
+	private final int SALVAR_ID = Menu.FIRST;
+	private final int BUSCAR_ID = Menu.FIRST + 1;
+	private final int ATUALIZAR_ID = Menu.FIRST + 2;
+	
+	@Override
+	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+        
 
-	private TextWatcher formatarTextoParaNumerico = new TextWatcher() {
+		menu.add(Menu.NONE, SALVAR_ID, Menu.NONE,"Salvar")
+            .setIcon( R.drawable.ic_compose)
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
-		@Override
-		public void onTextChanged(CharSequence s, int start, int before,
-				int count) {
+		menu.add(Menu.NONE, BUSCAR_ID, Menu.NONE,"Buscar")
+            .setIcon(R.drawable.ic_search)
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
-			try {
-				valorDeEntrada = Double.parseDouble(s.toString());
-			} catch (NumberFormatException e) {
-				valorDeEntrada = 0.0;
-			}
+		menu.add(Menu.NONE, ATUALIZAR_ID, Menu.NONE,"Atualizar")
+            .setIcon( R.drawable.ic_refresh)
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
-			calcularDesconto();
-		}
-
-		@Override
-		public void afterTextChanged(Editable s) {
-		} 
-
-		@Override
-		public void beforeTextChanged(CharSequence s, int start, int count,
-				int after) {
-		} 
-	};
+        return true;
+	}
 
 	@Override
-	public void onInit(int status) {
-		if (status == TextToSpeech.SUCCESS) {
-			Toast.makeText(DescontoSimples.this,"Text-To-Speech engine foi inicialiado", Toast.LENGTH_LONG).show();
-			tts.setLanguage(new Locale("pt-BR"));
+	public boolean onOptionsItemSelected(android.view.MenuItem item) {
+		// TODO Auto-generated method stub
+	
+		switch (item.getItemId()) {
+		case SALVAR_ID:
+			
+			break;
+
+		case BUSCAR_ID:
 		
-		
-		} else if (status == TextToSpeech.ERROR) {
-			Toast.makeText(DescontoSimples.this,
-					"Erro ao iniciaizar o  Text-To-Speech engine",
-					Toast.LENGTH_LONG).show();
+			       
+            AlertDialog.Builder alertaBuscar = 
+            new AlertDialog.Builder(this);         
+            alertaBuscar.setTitle("Resposta");
+            alertaBuscar.setMessage("Valor Presente: "+dValorPresente +
+            		"\nTaxa: "+dTaxa+"%\n"+
+            		"Valor final: "+valorfinal);
+            alertaBuscar.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                 // String value = input.getText().toString();
+                  // Do something with value!
+                    //You will get input data in this variable. 
+                	dialog.cancel();
+          
+                  }
+                });
+                           
+      
+         
+           AlertDialog choicesDialog = alertaBuscar.create();
+           choicesDialog.show(); // show the Dialog            
+         return true;
+ 
+		case ATUALIZAR_ID:
+			Log.i("Item selecionado no menu ",  "ATUALIZAR_ID ");
+		       
+            AlertDialog.Builder alertaAtualizarBuscar = 
+            new AlertDialog.Builder(this);         
+            alertaAtualizarBuscar.setTitle("Limpar tela?");
+            alertaAtualizarBuscar.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+      	          Intent intent = new Intent(getApplicationContext(),DescontoSimples.class);
+      	          DescontoSimples.this.finish();  
+      	          startActivity(intent);
+                    dialog.cancel();  
+          
+                  }
+                });
+                           
+      
+          // create an AlertDialog from the Builder
+           AlertDialog choicesDialogAtlza = alertaAtualizarBuscar.create();
+           choicesDialogAtlza.show(); // show the Dialog            
+         return true;
 		}
+     	
 		
-	} 
+		return super.onOptionsItemSelected(item);
+	}
+
+
+
+	
 }

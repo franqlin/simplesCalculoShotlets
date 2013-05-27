@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_span="2"
+    android:background="@drawable/bg_striped_azul"
+    tools:context=".MeuBoleto" >
+
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="5dp"
+        android:stretchColumns="1,2,3" >
+
+        <TableRow
+            android:id="@+id/tableRow0"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <!--
+             TextView
+            android:id="@+id/billTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingRight="5dp"
+            android:text="Valor"
+            android:textSize="18sp" 
+            style="@style/texto"
+            /
+            -->
+
+            <EditText
+                android:id="@+id/idValorPresente"
+                style="@style/campo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_span="3"
+                android:layout_weight="1"
+                android:ems="10"
+                android:gravity="right"
+                android:hint="@string/valor_doc"
+                android:inputType="numberDecimal"
+                android:lines="1"
+                android:maxLength="12"
+                android:textAlignment="textStart"
+                android:textSize="34sp"
+                android:textStyle="bold" >
+
+                <requestFocus />
+            </EditText>
+        </TableRow>
+
+        <!-- tableRow4 -->
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/idTvDtVcto"
+                style="@style/texto"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingRight="5dp"
+                android:text="@string/dt_vencimento"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/idEdDtVcto"
+                style="@style/campo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_span="3"
+                android:layout_weight="1"
+                android:cursorVisible="false"
+                android:ems="12"
+                android:focusable="false"
+                android:hint="@string/dataStr"
+                android:inputType="date"
+                android:lines="1"
+                android:longClickable="false"
+                android:maxLength="10"
+                android:textIsSelectable="true"
+                android:textSize="18sp" />
+
+            <ImageButton
+                android:id="@+id/idBtVcto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/dt_vencimento"
+                android:cropToPadding="true"
+                android:onClick="selecionarDataVencimento"
+                android:src="@drawable/datecal" />
+        </TableRow>
+
+        <!-- tableRow5 -->
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/idTvDtPgto"
+                style="@style/texto"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingRight="5dp"
+                android:text="@string/dt_pgto"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/idEdDtPgto"
+                style="@style/campo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_span="3"
+                android:layout_weight="1"
+                android:cursorVisible="false"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="@string/dataStr"
+                android:inputType="numberDecimal"
+                android:lines="1"
+                android:longClickable="false"
+                android:maxLength="10"
+                android:textIsSelectable="true"
+                android:textSize="18sp" />
+
+            <ImageButton
+                android:id="@+id/idBtVcto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/editText1"
+                android:layout_gravity="center_vertical"
+                android:layout_toRightOf="@+id/editText1"
+                android:contentDescription="@string/dt_vencimento"
+                android:cropToPadding="true"
+                android:onClick="selecionarDataPagamento"
+                android:src="@drawable/datecal" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/idTvMulta"
+                style="@style/texto"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingRight="5dp"
+                android:text="@string/multa"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/idEdMulta"
+                style="@style/campo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_span="3"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                android:lines="1"
+                android:maxLength="7"
+                android:textSize="18sp" >
+            </EditText>
+
+            <Spinner
+                android:id="@+id/idTipoMulta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:entries="@array/taxa"
+                android:prompt="@string/label_tx_periodo" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/tipCustomTextView"
+                style="@style/texto"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingRight="5dp"
+                android:text="@string/juros_ad"
+                android:textSize="18sp" >
+            </TextView>
+
+            <EditText
+                android:id="@+id/idTaxaJuro"
+                style="@style/campo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_span="3"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                android:lines="1"
+                android:maxLength="7"
+                android:textSize="18sp" />
+
+            <Spinner
+                android:id="@+id/idTipoTx"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:entries="@array/taxa"
+                android:prompt="@string/label_tx_periodo" />
+        </TableRow>
+
+        <include
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.01"
+            layout="@layout/resposta" />
+    </TableLayout>
+
+</ScrollView>

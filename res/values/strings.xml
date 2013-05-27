@@ -6,6 +6,7 @@
     <string name="hello_world"></string>
     <string name="billTotal">Valor</string>
     <string name="desc">Desconto</string>
+    <string name="acresc">Acréscimo</string>
     <string name="total">Total</string>
     <string name="custom">Taxa(%)</string>
     <string name="zero">0.00</string>
@@ -27,19 +28,38 @@
     <string name="title_activity_financiamentos">Financiamentos</string>
     <string name="label_tx_periodo">% ao</string>
     <string name="valor_futuro">Valor Futuro</string>
+    <string name="valor_presente">Valor Presente</string>
     <string name="jurosSimples">Simples</string>
     <string name="jurosComposto">Composto</string>
-   
-    
     <string name="dia">Dia</string>
     <string name="mes">Mês</string>
     <string name="ano">Ano</string>
-    <string-array name="periodo">
-      <item>@string/dia</item>
-      <item>@string/mes</item>
-      <item>@string/ano</item>
-    </string-array>
-    
 
+    <string-array name="periodo">
+        <item>@string/dia</item>
+        <item>@string/mes</item>
+        <item>@string/ano</item>
+    </string-array>
+
+    <string name="txPerc">%</string>
+    <string name="dinheiro">R$</string>
+
+    <string-array name="taxa">
+        <item>@string/dinheiro</item>
+        <item>@string/txPerc</item>
+    </string-array>
+
+    <string name="title_activity_meu_boleto">Meu Boleto</string>
+    <string name="valor_doc">Valor do Documento</string>
+    <string name="dt_vencimento">Data Vencimento</string>
+    <string name="dt_pgto">Data Pagamento</string>
+    <string name="juros_ad">Juros(ao dia)</string>
+    <string name="totalMultaJuro">Total de Multa e Juro</string>
+    <string name="valorAtualizado">Valor Atualizado</string>
+    <string name="multa">Multa</string>
+    <string name="dataStr">DD/MM/AAAA</string>
+    <string name="labelRespDesconto">O valor com desconto é:</string>
+    <string name="labelRespAcrescimo">O valor com acréscimo é:</string>
+    <string name="title_activity_tab">TabActivity</string>
 
 </resources>

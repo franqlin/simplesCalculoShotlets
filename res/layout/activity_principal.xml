@@ -2,17 +2,21 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_span="2" >
+    android:layout_span="2" 
+    android:background="@drawable/bg_striped_azul"
+    >
 
     <TableLayout
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
+       
         android:padding="5dp"
         android:stretchColumns="*" >
 
-        <TableRow android:layout_gravity="center" >
+        <TableRow android:layout_gravity="center"
+            
+             >
 
             <TextView />
 
@@ -20,7 +24,7 @@
                 android:id="@+id/idBntDescSimples"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="15dp"
-                android:background="@android:color/white"
+                android:background="@null"
                 android:height="@dimen/btnAltura"
                 android:src="@drawable/porcent"
                 android:text="1"
@@ -56,7 +60,7 @@
                 android:text="1"
                 android:width="@dimen/btnLargura" />
            <ImageButton
-                android:id="@+id/idBntDescSimples6"
+                android:id="@+id/idBntMeuBoleto"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="15dp"
                 android:background="@null"

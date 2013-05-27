@@ -1,6 +1,6 @@
 package org.shortlets.simplescalculo;
 
-import org.shortlets.simplescalculo.util.ButtonUtil;
+import org.shortlets.simplescalculo.util.ViewUtil;
 
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -28,36 +28,43 @@ public class Principal extends Activity {
 
 		//Botao(1) Desconto Simples
 		bntDescSimples = (ImageButton) findViewById(R.id.idBntDescSimples);
-		bntDescSimples.setOnTouchListener(ButtonUtil.getOnTouchListenerColor(Color.BLACK, Color.WHITE));
-		bntDescSimples.setOnLongClickListener(ButtonUtil.getOnLongClickListener(getString(R.string.descontoSimplesDescricao)));
-		bntDescSimples.setOnClickListener(ButtonUtil.getOnClickListenerIntent(getApplicationContext(), DescontoSimples.class, this));
+		//bntDescSimples.setOnTouchListener(ViewUtil.getOnTouchListenerColor(Color.BLACK, Color.WHITE));
+		bntDescSimples.setOnLongClickListener(ViewUtil.getOnLongClickListener(getString(R.string.descontoSimplesDescricao)));
+		bntDescSimples.setOnClickListener(ViewUtil.getOnClickListenerIntent(getApplicationContext(), DescontoSimples.class, this));
 		//fim Eventos do bot‹o(1) 
 		
 
 		
 		// Botao juros
 		ImageButton bntJuros =(ImageButton) findViewById(R.id.idBntJuros);
-		bntJuros.setOnTouchListener(ButtonUtil.getOnTouchListenerColor(Color.BLACK, Color.WHITE));
-        bntJuros.setOnLongClickListener(ButtonUtil.getOnLongClickListener(getString( R.string.jurosDescricao)));
-        bntJuros.setOnClickListener(ButtonUtil.getOnClickListenerIntent(getApplicationContext(), Juros.class, this));
+		//bntJuros.setOnTouchListener(ViewUtil.getOnTouchListenerColor(Color.BLACK, Color.WHITE));
+        bntJuros.setOnLongClickListener(ViewUtil.getOnLongClickListener(getString( R.string.jurosDescricao)));
+        bntJuros.setOnClickListener(ViewUtil.getOnClickListenerIntent(getApplicationContext(), Juros.class, this));
         
         
 		// Botao Financiamentos
 		ImageButton bntFinanciamentos =(ImageButton) findViewById(R.id.idBntFinanciamentos);
-		bntFinanciamentos.setOnTouchListener(ButtonUtil.getOnTouchListenerColor(Color.BLACK, Color.WHITE));
-        bntFinanciamentos.setOnLongClickListener(ButtonUtil.getOnLongClickListener(getString( R.string.financiamentosDescricao)));
-        bntFinanciamentos.setOnClickListener(ButtonUtil.getOnClickListenerIntent(getApplicationContext(), Financiamentos.class, this));
+		//bntFinanciamentos.setOnTouchListener(ViewUtil.getOnTouchListenerColor(Color.BLACK, Color.TRANSPARENT));
+        bntFinanciamentos.setOnLongClickListener(ViewUtil.getOnLongClickListener(getString( R.string.financiamentosDescricao)));
+        bntFinanciamentos.setOnClickListener(ViewUtil.getOnClickListenerIntent(getApplicationContext(), TabActivity.class, this));
         
+        // Meu desconto
+        //idBntMeuBoleto
+		ImageButton bntMeuBoleto =(ImageButton) findViewById(R.id.idBntMeuBoleto);
+		//bntMeuBoleto.setOnTouchListener(ViewUtil.getOnTouchListenerColor(Color.BLACK, Color.WHITE));
+		bntMeuBoleto.setOnLongClickListener(ViewUtil.getOnLongClickListener(getString( R.string.title_activity_meu_boleto)));
+		bntMeuBoleto.setOnClickListener(ViewUtil.getOnClickListenerIntent(getApplicationContext(), MeuBoleto.class, this));
         
+		//Calendario 
 		ImageButton bntGcal = (ImageButton) findViewById(R.id.idBntgCalc);
-		bntGcal.setOnTouchListener(ButtonUtil.getOnTouchListenerColor(Color.BLACK, Color.WHITE));
-		bntGcal.setOnClickListener(ButtonUtil.getOnClickListenerIntent(Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI, this));
-		bntGcal.setOnLongClickListener(ButtonUtil.getOnLongClickListener(getString(R.string.agendaDescricao)));
+		//bntGcal.setOnTouchListener(ViewUtil.getOnTouchListenerColor(Color.BLACK, Color.WHITE));
+		bntGcal.setOnClickListener(ViewUtil.getOnClickListenerIntent(Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI, this));
+		bntGcal.setOnLongClickListener(ViewUtil.getOnLongClickListener(getString(R.string.agendaDescricao)));
 		
 		ImageButton bntCalendar = (ImageButton) findViewById(R.id.idBntCalendar);
-		bntCalendar.setOnTouchListener(ButtonUtil.getOnTouchListenerColor(Color.BLACK, Color.WHITE));
-		bntCalendar.setOnClickListener(ButtonUtil.openCaledar(this));
-		bntCalendar.setOnLongClickListener(ButtonUtil.getOnLongClickListener(getString(R.string.caledarioDescricao)));
+		//bntCalendar.setOnTouchListener(ViewUtil.getOnTouchListenerColor(Color.BLACK, Color.WHITE));
+		bntCalendar.setOnClickListener(ViewUtil.openCaledar(this));
+		bntCalendar.setOnLongClickListener(ViewUtil.getOnLongClickListener(getString(R.string.caledarioDescricao)));
 	}
 
 	@Override
